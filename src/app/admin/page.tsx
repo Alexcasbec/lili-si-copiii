@@ -144,6 +144,9 @@ export default function AdminPage() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Status
                       </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Acțiuni
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -179,6 +182,14 @@ export default function AdminPage() {
                               Disponibil
                             </span>
                           )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <button
+                            onClick={() => window.open(`/produs/${item.id}`, '_blank')}
+                            className="px-3 py-1 text-xs bg-pink-500 text-white rounded hover:bg-pink-600 transition-colors"
+                          >
+                            Editează
+                          </button>
                         </td>
                       </tr>
                     ))}
