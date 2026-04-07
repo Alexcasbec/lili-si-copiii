@@ -27,9 +27,10 @@ export default function AdminLoginPage() {
 
       if (response.ok) {
         localStorage.setItem('adminToken', data.token)
+        localStorage.setItem('adminUser', JSON.stringify(data.user))
         router.push('/admin')
       } else {
-        setError(data.error)
+        setError(data.message)
       }
     } catch (error) {
       setError('Eroare de conexiune')
