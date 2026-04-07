@@ -16,6 +16,8 @@ export default function AdminLoginPage() {
     setIsLoading(true)
     setError('')
 
+    console.log('🔍 LOGIN START:', credentials.email)
+
     try {
       // Login ultra-simplificat - doar validare și redirect
       const validCredentials = [
@@ -24,18 +26,25 @@ export default function AdminLoginPage() {
         { email: 'editor@lilisicopiii.ro', password: 'editor123' },
       ]
 
+      console.log('🔍 CHECKING CREDENTIALS...')
+
       const isValid = validCredentials.some(
         cred => cred.email === credentials.email && cred.password === credentials.password
       )
 
+      console.log('🔍 IS VALID:', isValid)
+
       if (isValid) {
+        console.log('🔍 REDIRECTING TO /admin...')
         // Redirect direct - fără localStorage
         window.location.href = '/admin'
       } else {
+        console.log('🔍 INVALID CREDENTIALS')
         setError('Email sau parolă incorectă')
       }
     } catch (error) {
-      setError('Eroare. Încercați din nou.')
+      console.error('🔍 CATCH ERROR:', error)
+      setError('Eroare: ' + error.message)
     } finally {
       setIsLoading(false)
     }
