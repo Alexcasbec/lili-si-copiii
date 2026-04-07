@@ -16,6 +16,9 @@ export default function AdminLoginPage() {
     setIsLoading(true)
     setError('')
 
+    console.log('🔍 LOGIN ATTEMPT:', credentials.email)
+    console.log('🔍 PASSWORD:', credentials.password)
+
     try {
       // Login 100% local - fără API call
       const users = [
@@ -24,21 +27,38 @@ export default function AdminLoginPage() {
         { email: 'editor@lilisicopiii.ro', password: 'editor123', role: 'editor', name: 'Editor' },
       ]
 
+      console.log('🔍 USERS AVAILABLE:', users.length)
+
       const user = users.find(u => u.email === credentials.email && u.password === credentials.password)
 
+      console.log('🔍 USER FOUND:', !!user)
+      console.log('🔍 USER DETAILS:', user)
+
       if (user) {
+        console.log('🔍 CREATING TOKEN...')
         const token = btoa(`${user.email}:${Date.now()}`)
+        console.log('🔍 TOKEN CREATED:', token.substring(0, 20) + '...')
+        
+        console.log('🔍 SAVING TO LOCAL STORAGE...')
         localStorage.setItem('adminToken', token)
-        localStorage.setItem('adminUser', JSON.stringify({
+        console.log('🔍 TOKEN SAVED')
+        
+        const userData = {
           email: user.email,
           name: user.name,
           role: user.role
-        }))
+        }
+        localStorage.setItem('adminUser', JSON.stringify(userData))
+        console.log('🔍 USER DATA SAVED:', userData)
+        
+        console.log('🔍 REDIRECTING TO /admin...')
         router.push('/admin')
       } else {
+        console.log('🔍 INVALID CREDENTIALS')
         setError('Email sau parolă incorectă')
       }
     } catch (error) {
+      console.error('🔍 LOGIN ERROR:', error)
       setError('Eroare la salvarea datelor. Încercați din nou.')
     } finally {
       setIsLoading(false)
