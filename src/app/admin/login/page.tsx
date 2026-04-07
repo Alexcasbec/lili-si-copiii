@@ -17,23 +17,29 @@ export default function AdminLoginPage() {
     setError('')
 
     try {
-      const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials),
-      })
+      // Login 100% local - fără API call
+      const users = [
+        { email: 'admin@lilisicopiii.ro', password: 'admin123', role: 'super_admin', name: 'Admin Principal' },
+        { email: 'manager@lilisicopiii.ro', password: 'manager123', role: 'manager', name: 'Manager' },
+        { email: 'editor@lilisicopiii.ro', password: 'editor123', role: 'editor', name: 'Editor' },
+      ]
 
-      const data = await response.json()
+      const user = users.find(u => u.email === credentials.email && u.password === credentials.password)
 
-      if (response.ok) {
-        localStorage.setItem('adminToken', data.token)
-        localStorage.setItem('adminUser', JSON.stringify(data.user))
+      if (user) {
+        const token = btoa(`${user.email}:${Date.now()}`)
+        localStorage.setItem('adminToken', token)
+        localStorage.setItem('adminUser', JSON.stringify({
+          email: user.email,
+          name: user.name,
+          role: user.role
+        }))
         router.push('/admin')
       } else {
-        setError(data.message)
+        setError('Email sau parolă incorectă')
       }
     } catch (error) {
-      setError('Eroare de conexiune')
+      setError('Eroare la salvarea datelor. Încercați din nou.')
     } finally {
       setIsLoading(false)
     }
