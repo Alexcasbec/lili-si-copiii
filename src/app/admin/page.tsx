@@ -15,13 +15,7 @@ export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Check admin authentication
-    const token = localStorage.getItem('adminToken')
-    if (!token) {
-      router.push('/admin/login')
-      return
-    }
-
+    // Fără verificare token - acces direct
     // Load data
     const loadData = async () => {
       try {
@@ -35,7 +29,7 @@ export default function AdminPage() {
     }
 
     loadData()
-  }, [router])
+  }, [])
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken')
