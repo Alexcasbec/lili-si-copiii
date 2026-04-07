@@ -1,6 +1,4 @@
-import { promises as fs } from 'node:fs'
-import path from 'node:path'
-import { randomUUID } from 'node:crypto'
+import { randomUUID } from 'crypto'
 
 export type OrderChannel = 'whatsapp' | 'email'
 
@@ -21,29 +19,32 @@ export type OrderRecord = OrderInput & {
   createdAt: string
 }
 
-const ordersFilePath = path.join(process.cwd(), 'data', 'orders.json')
+const ORDERS_STORAGE_KEY = 'lili_orders'
 
-const ensureOrdersFile = async () => {
-  const dataDir = path.dirname(ordersFilePath)
-  await fs.mkdir(dataDir, { recursive: true })
-
+const getStoredOrders = (): OrderRecord[] => {
+  if (typeof window === 'undefined') return []
+  
   try {
-    await fs.access(ordersFilePath)
+    const raw = window.localStorage.getItem(ORDERS_STORAGE_KEY)
+    if (!raw) return []
+    return JSON.parse(raw) as OrderRecord[]
   } catch {
-    await fs.writeFile(ordersFilePath, '[]', 'utf-8')
+    return []
   }
 }
 
-export const getOrders = async (): Promise<OrderRecord[]> => {
-  await ensureOrdersFile()
-  const raw = await fs.readFile(ordersFilePath, 'utf-8')
+const saveOrders = (orders: OrderRecord[]) => {
+  if (typeof window === 'undefined') return
+  window.localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders))
+}
 
-  const parsed = JSON.parse(raw) as OrderRecord[]
-  return parsed.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
+export const getOrders = async (): Promise<OrderRecord[]> => {
+  const orders = getStoredOrders()
+  return orders.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
 }
 
 export const createOrder = async (payload: OrderInput): Promise<OrderRecord> => {
-  const orders = await getOrders()
+  const orders = getStoredOrders()
 
   const order: OrderRecord = {
     id: randomUUID(),
@@ -51,8 +52,8 @@ export const createOrder = async (payload: OrderInput): Promise<OrderRecord> => 
     ...payload
   }
 
-  orders.unshift(order)
-  await fs.writeFile(ordersFilePath, JSON.stringify(orders, null, 2), 'utf-8')
+  const updatedOrders = [order, ...orders]
+  saveOrders(updatedOrders)
 
   return order
 }
