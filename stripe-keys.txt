@@ -1,0 +1,15 @@
+# Adaugă aceste chei în fișierul .env.local:
+
+# Stripe Test Keys (obține de pe https://dashboard.stripe.com/apikeys)
+STRIPE_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+
+# Pentru producție, folosește cheile live:
+# STRIPE_SECRET_KEY=sk_live_...
+# NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
+
+# Pași pentru a obține cheile:
+# 1. Creează cont pe https://stripe.com
+# 2. Mergi la Dashboard → Developers → API keys
+# 3. Copiază cheile și adaugă-le în .env.local
+# 4. Restart serverul de dezvoltare

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "e8087819-b641-4655-9756-063e067f1137",
+    "createdAt": "2026-04-05T22:41:10.549Z",
+    "productName": "Test produs",
+    "nume": "Alex Test",
+    "telefon": "0712345678",
+    "email": "alex@test.ro",
+    "canal": "whatsapp",
+    "marime": "3-6 luni",
+    "cantitate": "1",
+    "observatii": "test save"
+  }
+]
