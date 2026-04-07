@@ -44,7 +44,7 @@ export default function AdminLoginPage() {
       }
     } catch (error) {
       console.error('🔍 CATCH ERROR:', error)
-      setError('Eroare: ' + error.message)
+      setError('Eroare: ' + (error instanceof Error ? error.message : 'Eroare necunoscută'))
     } finally {
       setIsLoading(false)
     }
